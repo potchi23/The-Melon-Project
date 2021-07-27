@@ -6,7 +6,7 @@ const User = new Schema(
     {
         username : {
             type : String,
-            required : true
+            default : true
         },
         
         admin : {
@@ -16,27 +16,39 @@ const User = new Schema(
 
         firstname : {
             type : String,
-            required : true
+            default : ''
         },
 
         middlename : {
             type : String,
-            required : true
+            default : ''
         },
 
         lastname : {
             type : String,
-            required : true
+            default : ''
         },
 
         birthday : {
             type : Date,
-            required : true
+            default : ''
         },
 
-        location : {
-            type : String,
-            required : true
+        location : { 
+            city : {
+                type : String,
+                default : ''
+            },
+    
+            country : {
+                type : String,
+                default : ''
+            },
+    
+            area : {
+                type : String,
+                default : ''
+            }
         }
     }
 );

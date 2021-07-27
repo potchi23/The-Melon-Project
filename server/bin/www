@@ -36,6 +36,11 @@ server.on('listening', onListening);
  * Normalize a port into a number, string, or false.
  */
 
+var options = {
+    key: fs.readFileSync(__dirname + '/private.key'),
+    cert: fs.readFileSync(__dirname + '/certificate.pem')
+};
+
 var secureServer = https.createServer(options, app);
 
 secureServer.listen(app.get('secPort'), () =>{

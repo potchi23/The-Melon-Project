@@ -1,13 +1,41 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/usersRouter');
 
-var app = express();
+const passport = require('passport');
+const mongoose = require('mongoose');
+const config = require('./config');
+
+const url = config.mongoUrl;
+
+const mongooseOptions = {
+    useNewUrlParser: true, 
+    useUnifiedTopology: true, 
+    useFindAndModify : false, 
+    useCreateIndex : true 
+};
+
+const connect = mongoose.connect(url, mongooseOptions);
+
+connect.then((db) => {
+    console.log('Connected to server');
+}, (err) => { console.log(err) });
+
+const app = express();
+
+app.all('*', (req, res, next) => {
+    if(req.secure){
+        return next();
+    }
+    else{
+        res.redirect(307, 'https://' + req.hostname + ':' + app.get('secPort') + req.url);
+    }
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -16,11 +44,15 @@ app.set('view engine', 'pug');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(cookieParser());
+
+app.use(passport.initialize());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

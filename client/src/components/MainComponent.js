@@ -24,8 +24,8 @@ class Main extends Component{
 
         return(
             <Switch>
-                <Route exact path="/login" component={Login}/>
-                <Route exact path="/dashboard" component={() => <Dashboard isAuthenticated={this.props.auth.isAuthenticated}/>}/>
+                <Route exact path="/login" component={() => <Login isAuthenticated={this.props.auth.isAuthenticated} loginUser={this.props.loginUser}/>}/>
+                <Route exact path="/dashboard" component={() => <Dashboard isAuthenticated={this.props.auth.isAuthenticated} logoutUser={this.props.logoutUser}/>}/>
                 <Redirect to="/dashboard"/>
             </Switch>
         );

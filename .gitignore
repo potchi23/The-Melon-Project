@@ -1,4 +1,3 @@
-client/node_modules
-server/node_modules
+node_modules
 mongodb
-mongod_command.txt
+sample.json
