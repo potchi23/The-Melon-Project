@@ -5,6 +5,7 @@ import { loginUser, logoutUser } from '../redux/auth/AuthActionCreators'
 
 import Login from './LoginComponent';
 import Dashboard from './Dashboard';
+import Header from './Header/Header';
 
 const mapStateToProps = (state) => {
     return {
@@ -20,14 +21,30 @@ const mapDispatchToProps = (dispatch) => (
 );
 
 class Main extends Component{
+
+
     render(){
+        const RenderHeader = () =>{
+            if(this.props.auth.isAuthenticated){
+                return(
+                    <Header logoutUser={this.props.logoutUser}/>
+                );
+            }
+            else{
+                return(<div/>);
+            }
+        }
 
         return(
-            <Switch>
-                <Route exact path="/login" component={() => <Login isAuthenticated={this.props.auth.isAuthenticated} loginUser={this.props.loginUser}/>}/>
-                <Route exact path="/dashboard" component={() => <Dashboard isAuthenticated={this.props.auth.isAuthenticated} logoutUser={this.props.logoutUser}/>}/>
-                <Redirect to="/dashboard"/>
-            </Switch>
+            <div>
+                <RenderHeader/>
+
+                <Switch>
+                    <Route exact path="/login" component={() => <Login isAuthenticated={this.props.auth.isAuthenticated} loginUser={this.props.loginUser}/>}/>
+                    <Route exact path="/dashboard" component={() => <Dashboard isAuthenticated={this.props.auth.isAuthenticated}/>}/>
+                    <Redirect to="/dashboard"/>
+                </Switch>
+            </div>
         );
     }
     
